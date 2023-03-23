@@ -2,15 +2,16 @@ import java.util.Scanner;
 
 public class AmusementPark {
 
+	static PhaseCheck phaseCheck = new PhaseCheck("entering");
+	
 	public static void main(String[] args) {
-		
 		String phase = "entering";
 		Scanner input = new Scanner(System.in);
 		Ticket tickets = new Ticket(0, false);
 		
 		// Welcome + Buying Tickets
 		
-		while (phase.equalsIgnoreCase("entering")) {
+		while (phaseCheck.getPhase().equals("entering")) {
 			printm(new String[] {"Welcome to ARM Amusement Park!", 
 					 "(Type the text in the []s to interact)", 
 					 "What would you like to do?\n", 
@@ -33,7 +34,7 @@ public class AmusementPark {
 					print("--------------------");	
 					println("\nYou walk over to the ticket counter.");
 					tickets.buyTickets(false, 0);
-					phase = "choosing";
+					phaseCheck.setPhase("choosing");
 					break;
 				case "card":
 					println("--------------------");	
@@ -45,7 +46,7 @@ public class AmusementPark {
 		// Choosing an Attraction
 		
 		println("Welcome inside ARM Amusement Park!");
-		while (phase == "choosing") {
+		while (phaseCheck.getPhase().equals("choosing")) {
 			println("Which attraction would you like to use?\n");
 			Attraction[] games = {
 					new LazyRiver("Lazily&Built&River [river]", 3, 5, tickets),
@@ -76,7 +77,7 @@ public class AmusementPark {
 							print("--------------------\n>> ");
 							switch (input.next().toLowerCase()) {
 								case "play":
-									phase = "playing";
+									phaseCheck.setPhase("playing");
 									games[i].play();
 								case "back":
 									break;
@@ -87,6 +88,11 @@ public class AmusementPark {
 		}
 		
 		
+	}
+	
+	// function for phaseCheck (helps keep things in track)
+	static void setPhaseFromAttraction(String p) {
+		phaseCheck.setPhase(p);
 	}
 	
 	// convenience functions (god so help me i am NOT typing System.out.print 1 billion times
@@ -109,3 +115,12 @@ public class AmusementPark {
 	}
 
 }
+
+class PhaseCheck {
+	String phase;
+	
+	public PhaseCheck(String p) { setPhase(p); }
+	public void setPhase(String p) { phase = p.toLowerCase(); }
+	public String getPhase() { return phase.toLowerCase(); }
+}
+
